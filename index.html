@@ -3,211 +3,331 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analyzing Joint...</title>
+  <title>Press-Fit Analysis: Test 4</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #F8FAFC;
-      color: #334155;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px;
-      width: 100%;
-    }
-    .loading-card {
-      background: #fff;
-      border: 1px solid #E2E8F0;
-      border-radius: 16px;
-      padding: 60px 40px;
-      text-align: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-    }
-
-    /* Spinner */
-    .spinner-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 32px;
-    }
-    .spinner {
-      width: 64px;
-      height: 64px;
-      border: 4px solid #E2E8F0;
-      border-top: 4px solid #2563EB;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Pulse ring behind spinner */
-    .spinner-ring {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .spinner-ring::before {
-      content: '';
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      border: 2px solid #DBEAFE;
-      border-radius: 50%;
-      animation: pulse-ring 2s ease-in-out infinite;
-    }
-    @keyframes pulse-ring {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.15); opacity: 0; }
-    }
-
-    .status-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1E293B;
-      margin-bottom: 8px;
-    }
-    .joint-name {
-      color: #2563EB;
-    }
-    .status-subtitle {
-      font-size: 15px;
-      color: #64748B;
-      margin-bottom: 32px;
-    }
-
-    /* Progress steps */
-    .steps {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #64748B;
-      transition: all 0.5s ease;
-    }
-    .step.active {
-      background: #EFF6FF;
-      border-color: #2563EB;
-      color: #1E293B;
-    }
-    .step.complete {
-      background: #F0FDF4;
-      border-color: #059669;
-      color: #059669;
-    }
-    .step-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #CBD5E1;
-      flex-shrink: 0;
-    }
-    .step.active .step-dot {
-      background: #2563EB;
-      animation: dot-pulse 1.5s ease-in-out infinite;
-    }
-    .step.complete .step-dot {
-      background: #059669;
-    }
-    @keyframes dot-pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: #94A3B8;
-      margin-top: 16px;
-    }
-
-    @media (max-width: 640px) {
-      .loading-card { padding: 40px 24px; }
-      .steps { flex-direction: column; align-items: center; }
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #F8FAFC; color: #334155; line-height: 1.6; }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+    .header { background: linear-gradient(135deg, #1E293B 0%, #334155 100%); color: white; padding: 40px 32px; border-radius: 16px; margin-bottom: 24px; }
+    .header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .header .subtitle { font-size: 16px; opacity: 0.8; }
+    .badge-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.15); color: white; }
+    .section { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .section-title { font-size: 20px; font-weight: 700; color: #1E293B; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #2563EB; }
+    .metrics-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+    .appendix-block { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .appendix-block h4 { font-size: 14px; color: #2563EB; margin-bottom: 8px; }
+    .appendix-block pre { white-space: pre-wrap; font-size: 13px; color: #334155; font-family: 'SF Mono', 'Consolas', monospace; }
+    .footer { text-align: center; padding: 24px; font-size: 12px; color: #94A3B8; }
+    @media (max-width: 640px) { .metrics-grid { flex-direction: column; } }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="loading-card">
-      <div class="spinner-wrapper">
-        <div class="spinner-ring">
-          <div class="spinner"></div>
-        </div>
-      </div>
-
-      <div class="status-title">
-        Analyzing <span class="joint-name" id="jointName">Test 4</span>
-      </div>
-      <div class="status-subtitle">
-        Press-fit optimization in progress. This typically takes 30–60 seconds.
-      </div>
-
-      <div class="steps">
-        <div class="step active" id="step1">
-          <span class="step-dot"></span>
-          Parsing inputs
-        </div>
-        <div class="step" id="step2">
-          <span class="step-dot"></span>
-          Baseline calculation
-        </div>
-        <div class="step" id="step3">
-          <span class="step-dot"></span>
-          Optimization analysis
-        </div>
-        <div class="step" id="step4">
-          <span class="step-dot"></span>
-          Building report
-        </div>
+    <!-- HEADER -->
+    <div class="header">
+      <h1>Test 4 — Press-Fit Analysis</h1>
+      <div class="subtitle">AI-Powered Design Review &amp; Optimization Report</div>
+      <div class="badge-row">
+        <span class="badge">polycarbonate pin</span>
+        <span class="badge">polycarbonate hole</span>
+        <span class="badge">Ø2.2 mm pin → Ø2 mm hole</span>
+        <span class="badge">Axial (along the axis of the pin) loading</span>
       </div>
     </div>
-
+ 
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <p style="font-size:15px;line-height:1.7;">The polycarbonate press-fit joint shows marginal performance with a safety factor of only 1.24 at maximum interference. The insertion forces range from 85-118 N, which are manageable for manual assembly. The 50% contact area reduction due to crush features significantly reduces both insertion force and retention capability compared to a full cylindrical contact.</p>
+      <div style="margin-top:12px;">Yield Check: <span style="display:inline-block;padding:4px 14px;border-radius:12px;font-size:13px;font-weight:700;background:#FEF9C3;color:#854D0E;">MARGINAL</span> &nbsp; Safety Factor: <strong>1.24</strong></div>
+    </div>
+ 
+    <!-- INPUT SUMMARY -->
+    <div class="section">
+      <div class="section-title">Input Parameters</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <h4 style="font-size:14px;color:#2563EB;margin-bottom:8px;">Pin</h4>
+          <table style="width:100%;font-size:13px;">
+            <tr><td style="color:#64748B;padding:2px 0;">Material</td><td style="font-weight:600;">polycarbonate</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Diameter</td><td style="font-weight:600;">2.2 mm (+0/-0.03)</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Length</td><td style="font-weight:600;">6 mm</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Draft Angle</td><td style="font-weight:600;">3°</td></tr>
+          </table>
+        </div>
+        <div>
+          <h4 style="font-size:14px;color:#2563EB;margin-bottom:8px;">Hole</h4>
+          <table style="width:100%;font-size:13px;">
+            <tr><td style="color:#64748B;padding:2px 0;">Material</td><td style="font-weight:600;">polycarbonate</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Inner Diameter</td><td style="font-weight:600;">2 mm (+0.01/-0.02)</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Depth</td><td style="font-weight:600;">10 mm</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Draft Angle</td><td style="font-weight:600;">2°</td></tr>
+          </table>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:#EFF6FF;border-radius:8px;"><strong style="color:#2563EB;">Optimization Goal:</strong> Maximize retention force while maintaining manufacturing cost from tooling and scrap</div>
+      <div style="margin-top:8px;padding:12px;background:#F8FAFC;border-radius:8px;"><strong>Additional Context:</strong> The inner diameter of the hole is made up of incomplete &quot;crush&quot; features that make the surface area of the ID only 50% of a typical cylinder</div>
+    </div>
+ 
+    <!-- BASELINE PERFORMANCE -->
+    <div class="section">
+      <div class="section-title">Baseline Performance</div>
+      
+      <div class="metrics-grid">
+        
+    <div style="flex:1;min-width:180px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;">
+      <div style="font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Contact Pressure</div>
+      <div style="font-size:24px;font-weight:700;color:#1E293B;">23.77<span style="font-size:14px;color:#64748B;"> MPa</span></div>
+      <div style="margin-top:8px;font-size:12px;color:#64748B;">
+        <span style="color:#059669;">Max: 26.15 MPa</span> &nbsp;|&nbsp; 
+        <span style="color:#DC2626;">Min: 19.02 MPa</span>
+      </div>
+    </div>
+        
+    <div style="flex:1;min-width:180px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;">
+      <div style="font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Insertion Force</div>
+      <div style="font-size:24px;font-weight:700;color:#1E293B;">106.8<span style="font-size:14px;color:#64748B;"> N</span></div>
+      <div style="margin-top:8px;font-size:12px;color:#64748B;">
+        <span style="color:#059669;">Max: 117.5 N</span> &nbsp;|&nbsp; 
+        <span style="color:#DC2626;">Min: 85.4 N</span>
+      </div>
+    </div>
+        
+    <div style="flex:1;min-width:180px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;">
+      <div style="font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Retention Force</div>
+      <div style="font-size:24px;font-weight:700;color:#1E293B;">106.8<span style="font-size:14px;color:#64748B;"> N</span></div>
+      <div style="margin-top:8px;font-size:12px;color:#64748B;">
+        <span style="color:#059669;">Max: 117.5 N</span> &nbsp;|&nbsp; 
+        <span style="color:#DC2626;">Min: 85.4 N</span>
+      </div>
+    </div>
+        
+    <div style="flex:1;min-width:180px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;">
+      <div style="font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Hoop Stress</div>
+      <div style="font-size:24px;font-weight:700;color:#1E293B;">undefined<span style="font-size:14px;color:#64748B;"> MPa</span></div>
+      <div style="margin-top:8px;font-size:12px;color:#64748B;">
+        <span style="color:#059669;">Max: undefined MPa</span> &nbsp;|&nbsp; 
+        <span style="color:#DC2626;">Min: undefined MPa</span>
+      </div>
+    </div>
+      </div>
+      <div style="margin-top:16px;">
+        <h4 style="font-size:14px;color:#64748B;margin-bottom:8px;">Material Properties Used</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+          <div style="background:#F8FAFC;padding:10px;border-radius:6px;">
+            <strong>Pin (polycarbonate):</strong> E=2.3 GPa, ν=0.37, σy=65 MPa
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">high</span>
+          </div>
+          <div style="background:#F8FAFC;padding:10px;border-radius:6px;">
+            <strong>Hole (polycarbonate):</strong> E=2.3 GPa, ν=0.37, σy=65 MPa
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">high</span>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:13px;color:#64748B;">Friction: μ = 0.38 (Typical value for dry polycarbonate-on-polycarbonate sliding contact)</div>
+      </div>
+      
+    </div>
+ 
+    <!-- OPTIMIZATION SUGGESTIONS -->
+    <div class="section">
+      <div class="section-title">Optimization Suggestions</div>
+      <p style="margin-bottom:16px;font-size:15px;line-height:1.7;color:#334155;">The current polycarbonate press-fit design is operating near its stress limits with marginal safety factor of 1.24. The 50% contact area reduction from crush features significantly limits performance. The most impactful improvements focus on increasing interference and optimizing the crush feature geometry, though both approaches push closer to yield limits and require careful validation.</p>
+      
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">1</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Increase Pin Diameter and Tighten Tolerances</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;">Medium</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Increase pin diameter from 2.2mm to 2.25mm and tighten tolerances to +0/-0.015mm on pin and +0.005/-0.015mm on hole to achieve 0.25-0.28mm interference range</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Pin: 2.2mm (+0/-0.03), Hole: 2.0mm (+0.01/-0.02), Interference: 0.16-0.22mm</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Pin: 2.25mm (+0/-0.015), Hole: 2.0mm (+0.005/-0.015), Interference: 0.235-0.28mm</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Increased from 85-118N to approximately 115-150N<br>
+          Retention Force: Increased from 85-118N to approximately 115-150N (+35% improvement)<br>
+          Stress: Hoop stress increases from 52.3MPa to ~62MPa, safety factor drops to 1.05<br>
+          More consistent performance due to tighter tolerance band
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Higher tooling costs for tighter tolerances, reduced safety margin (SF=1.05), higher insertion forces may require assembly tooling, increased risk of stress cracking during assembly</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">2</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Optimize Crush Feature Geometry</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;">Medium</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEE2E2;color:#991B1B;">High</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Redesign crush features to provide 70-75% contact area instead of 50% by using helical ribs or optimized crush rib spacing and geometry</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Crush features providing 50% contact area</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Optimized crush features providing 70-75% contact area</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Increased from 85-118N to approximately 120-165N<br>
+          Retention Force: Increased from 85-118N to approximately 120-165N (+40% improvement)<br>
+          Stress: Contact pressure distribution improves, peak stresses may reduce slightly<br>
+          Better stress distribution reduces risk of localized yielding
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">More complex tooling design required, potential for increased manufacturing variability, may require prototyping to optimize crush feature geometry</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">3</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Reduce Pin Draft Angle</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;">Medium</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Reduce pin draft angle from 3° to 1.5° to increase effective interference over the engagement length</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Pin draft angle: 3°</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Pin draft angle: 1.5°</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Increased from 85-118N to approximately 95-135N<br>
+          Retention Force: Increased from 85-118N to approximately 95-135N (+15% improvement)<br>
+          Stress: More uniform stress distribution along pin length<br>
+          Better engagement over full pin length
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">More difficult part ejection from molding tools, potential for increased tool wear, may require tool design modifications or ejector pins</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">4</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Add Surface Texturing to Pin</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;">Medium</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;">Medium</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Add controlled micro-texturing (Ra 1.6-3.2μm) to pin surface to increase effective friction coefficient from 0.38 to approximately 0.45-0.50</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Smooth pin surface, friction coefficient μ = 0.38</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Textured pin surface, friction coefficient μ = 0.45-0.50</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Increased from 85-118N to approximately 100-145N<br>
+          Retention Force: Increased from 85-118N to approximately 100-145N (+20% improvement)<br>
+          Stress: No change to contact pressure or hoop stress<br>
+          Improved resistance to vibration-induced loosening
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Additional manufacturing step increases cost, texture may cause stress concentrations, potential for inconsistent surface finish affecting performance variability</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">5</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Increase Hole Depth Engagement</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;">Low</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Increase effective engagement length from current 6mm pin length to 7-8mm by extending pin length while maintaining hole depth at 10mm</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Pin length: 6mm, engagement length: 6mm</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Pin length: 7.5mm, engagement length: 7.5mm</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Increased from 85-118N to approximately 105-145N<br>
+          Retention Force: Increased from 85-118N to approximately 105-145N (+25% improvement)<br>
+          Stress: No change to contact pressure, distributed over longer length<br>
+          Improved resistance to axial loading
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Increased material usage, longer insertion stroke required, potential for pin buckling during insertion if not properly guided</div>
+      </div>
+    </div>
+      <div style="margin-top:16px;padding:16px;background:#F0FDF4;border-radius:8px;border:1px solid #BBF7D0;"><strong style="color:#166534;">Additional Considerations:</strong><br>Consider validation testing for stress cracking susceptibility at higher interference levels. Investigate the specific crush feature geometry through prototyping to optimize contact area. Evaluate whether a chamfer or lead-in feature on the pin would reduce insertion force peaks. Consider long-term creep behavior of polycarbonate under sustained stress for permanent assemblies.</div>
+    </div>
+ 
+    <!-- ASSUMPTIONS -->
+    
+    <div class="section">
+      <div class="section-title">Assumptions</div>
+      <ul style="padding-left:20px;">
+        <li style="margin-bottom:6px;font-size:14px;">Outer diameter of hole component assumed to be 6 mm (3x the inner diameter)</li><li style="margin-bottom:6px;font-size:14px;">Both materials are at room temperature with no thermal expansion effects</li><li style="margin-bottom:6px;font-size:14px;">Material properties are for unfilled polycarbonate in dry conditions</li><li style="margin-bottom:6px;font-size:14px;">Draft angles are small enough to use average diameters for calculations</li><li style="margin-bottom:6px;font-size:14px;">Effective contact area reduced to 50% due to crush features</li><li style="margin-bottom:6px;font-size:14px;">Static and kinetic friction coefficients are assumed equal</li><li style="margin-bottom:6px;font-size:14px;">No surface treatments or lubricants present</li><li style="margin-bottom:6px;font-size:14px;">Elastic deformation only (no plastic yielding during assembly)</li>
+      </ul>
+    </div>
+ 
+    <!-- DETAILED CALCULATIONS APPENDIX -->
+    
+    <div class="section">
+      <div class="section-title">Appendix: Detailed Calculations</div>
+      <div class="appendix-block"><h4>Lamé Equation Setup</h4><pre>For thick-walled cylinder: p = δE/[2r²(1+ν)] × [r_o²/(r_o²-r_i²)] where p=contact pressure, δ=diametral interference, E=Young's modulus, r=radius at interface, r_o=outer radius, r_i=inner radius, ν=Poisson's ratio</pre></div>
+      <div class="appendix-block"><h4>Contact Pressure Calculation</h4><pre>Nominal case: p = (0.2×2300)/[2×1.1²×(1+0.37)] × [3²/(3²-1²)] = 460/3.31 × 1.125 = 23.77 MPa</pre></div>
+      <div class="appendix-block"><h4>Insertion Force Calculation</h4><pre>F = μ × p × A_contact where A_contact = 0.5 × π × d × L = 0.5 × π × 2.2 × 6 = 20.7 mm². F = 0.38 × 23.77 × 20.7 = 106.8 N</pre></div>
+      <div class="appendix-block"><h4>Hoop Stress & Yield Check</h4><pre>σ_θ = p × (r_i² + r_o²)/(r_o² - r_i²) = 26.15 × (1² + 3²)/(3² - 1²) = 26.15 × 10/8 = 52.3 MPa. Safety factor = 65/52.3 = 1.24</pre></div>
+    </div>
+ 
+    <!-- FOOTER -->
     <div class="footer">
-      Press-Fit Optimization Assistant &mdash; AI-Powered Design Review
+      <p>Generated by Press-Fit Optimization Assistant | 2026-03-16 19:18:05 UTC</p>
+      <p style="margin-top:4px;">AI-powered analysis — verify all calculations independently before making design decisions.</p>
+      <p style="margin-top:8px;font-size:11px;color:#CBD5E1;">Built for CoLab Software FDE Technical Interview</p>
     </div>
   </div>
-
-  <script>
-    // Simulated step progression for visual polish during the live demo.
-    // In production, this would be driven by real workflow status updates.
-    const steps = ['step1', 'step2', 'step3', 'step4'];
-    const timings = [8000, 18000, 28000]; // ms after page load to advance
-
-    timings.forEach((ms, i) => {
-      setTimeout(() => {
-        // Complete current step
-        document.getElementById(steps[i]).classList.remove('active');
-        document.getElementById(steps[i]).classList.add('complete');
-        // Activate next step
-        if (i + 1 < steps.length) {
-          document.getElementById(steps[i + 1]).classList.add('active');
-        }
-      }, ms);
-    });
-  </script>
 </body>
 </html>
