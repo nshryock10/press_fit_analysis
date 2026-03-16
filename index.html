@@ -3,211 +3,331 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analyzing Joint...</title>
+  <title>Press-Fit Analysis: Test 5</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #F8FAFC;
-      color: #334155;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px;
-      width: 100%;
-    }
-    .loading-card {
-      background: #fff;
-      border: 1px solid #E2E8F0;
-      border-radius: 16px;
-      padding: 60px 40px;
-      text-align: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-    }
-
-    /* Spinner */
-    .spinner-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 32px;
-    }
-    .spinner {
-      width: 64px;
-      height: 64px;
-      border: 4px solid #E2E8F0;
-      border-top: 4px solid #2563EB;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Pulse ring behind spinner */
-    .spinner-ring {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .spinner-ring::before {
-      content: '';
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      border: 2px solid #DBEAFE;
-      border-radius: 50%;
-      animation: pulse-ring 2s ease-in-out infinite;
-    }
-    @keyframes pulse-ring {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.15); opacity: 0; }
-    }
-
-    .status-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1E293B;
-      margin-bottom: 8px;
-    }
-    .joint-name {
-      color: #2563EB;
-    }
-    .status-subtitle {
-      font-size: 15px;
-      color: #64748B;
-      margin-bottom: 32px;
-    }
-
-    /* Progress steps */
-    .steps {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #64748B;
-      transition: all 0.5s ease;
-    }
-    .step.active {
-      background: #EFF6FF;
-      border-color: #2563EB;
-      color: #1E293B;
-    }
-    .step.complete {
-      background: #F0FDF4;
-      border-color: #059669;
-      color: #059669;
-    }
-    .step-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #CBD5E1;
-      flex-shrink: 0;
-    }
-    .step.active .step-dot {
-      background: #2563EB;
-      animation: dot-pulse 1.5s ease-in-out infinite;
-    }
-    .step.complete .step-dot {
-      background: #059669;
-    }
-    @keyframes dot-pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: #94A3B8;
-      margin-top: 16px;
-    }
-
-    @media (max-width: 640px) {
-      .loading-card { padding: 40px 24px; }
-      .steps { flex-direction: column; align-items: center; }
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #F8FAFC; color: #334155; line-height: 1.6; }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+    .header { background: linear-gradient(135deg, #1E293B 0%, #334155 100%); color: white; padding: 40px 32px; border-radius: 16px; margin-bottom: 24px; }
+    .header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .header .subtitle { font-size: 16px; opacity: 0.8; }
+    .badge-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.15); color: white; }
+    .section { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .section-title { font-size: 20px; font-weight: 700; color: #1E293B; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #2563EB; }
+    .metrics-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+    .appendix-block { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .appendix-block h4 { font-size: 14px; color: #2563EB; margin-bottom: 8px; }
+    .appendix-block pre { white-space: pre-wrap; font-size: 13px; color: #334155; font-family: 'SF Mono', 'Consolas', monospace; }
+    .footer { text-align: center; padding: 24px; font-size: 12px; color: #94A3B8; }
+    @media (max-width: 640px) { .metrics-grid { flex-direction: column; } }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="loading-card">
-      <div class="spinner-wrapper">
-        <div class="spinner-ring">
-          <div class="spinner"></div>
-        </div>
-      </div>
-
-      <div class="status-title">
-        Analyzing <span class="joint-name" id="jointName">Test 5</span>
-      </div>
-      <div class="status-subtitle">
-        Press-fit optimization in progress. This typically takes 30–60 seconds.
-      </div>
-
-      <div class="steps">
-        <div class="step active" id="step1">
-          <span class="step-dot"></span>
-          Parsing inputs
-        </div>
-        <div class="step" id="step2">
-          <span class="step-dot"></span>
-          Baseline calculation
-        </div>
-        <div class="step" id="step3">
-          <span class="step-dot"></span>
-          Optimization analysis
-        </div>
-        <div class="step" id="step4">
-          <span class="step-dot"></span>
-          Building report
-        </div>
+    <!-- HEADER -->
+    <div class="header">
+      <h1>Test 5 — Press-Fit Analysis</h1>
+      <div class="subtitle">AI-Powered Design Review &amp; Optimization Report</div>
+      <div class="badge-row">
+        <span class="badge">304 stainless steel pin</span>
+        <span class="badge">aluminum hole</span>
+        <span class="badge">Ø3.2 mm pin → Ø3 mm hole</span>
+        <span class="badge">Axial (along the axis of the pin) loading</span>
       </div>
     </div>
-
+ 
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <p style="font-size:15px;line-height:1.7;">The press-fit joint exhibits excessive hoop stress in the aluminum hole component, exceeding yield strength by 12% at maximum interference. The design requires modification such as reducing interference to 0.15mm maximum or increasing hole wall thickness to prevent plastic deformation during assembly.</p>
+      <div style="margin-top:12px;">Yield Check: <span style="display:inline-block;padding:4px 14px;border-radius:12px;font-size:13px;font-weight:700;background:#FEE2E2;color:#991B1B;">FAIL</span> &nbsp; Safety Factor: <strong>0.89</strong></div>
+    </div>
+ 
+    <!-- INPUT SUMMARY -->
+    <div class="section">
+      <div class="section-title">Input Parameters</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <h4 style="font-size:14px;color:#2563EB;margin-bottom:8px;">Pin</h4>
+          <table style="width:100%;font-size:13px;">
+            <tr><td style="color:#64748B;padding:2px 0;">Material</td><td style="font-weight:600;">304 stainless steel</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Diameter</td><td style="font-weight:600;">3.2 mm (+0.01/0)</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Length</td><td style="font-weight:600;">6 mm</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Draft Angle</td><td style="font-weight:600;">0°</td></tr>
+          </table>
+        </div>
+        <div>
+          <h4 style="font-size:14px;color:#2563EB;margin-bottom:8px;">Hole</h4>
+          <table style="width:100%;font-size:13px;">
+            <tr><td style="color:#64748B;padding:2px 0;">Material</td><td style="font-weight:600;">aluminum</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Inner Diameter</td><td style="font-weight:600;">3 mm (+0.02/0)</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Depth</td><td style="font-weight:600;">4 mm</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Draft Angle</td><td style="font-weight:600;">0°</td></tr>
+          </table>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:#EFF6FF;border-radius:8px;"><strong style="color:#2563EB;">Optimization Goal:</strong> Maintain low cost of manufacturability while keep retention force &gt;50N and preventing damage during assmbley.</div>
+      <div style="margin-top:8px;padding:12px;background:#F8FAFC;border-radius:8px;"><strong>Additional Context:</strong> Pin component includes a 1mm lead in chamfer</div>
+    </div>
+ 
+    <!-- BASELINE PERFORMANCE -->
+    <div class="section">
+      <div class="section-title">Baseline Performance</div>
+      
+      <div class="metrics-grid">
+        
+    <div style="flex:1;min-width:180px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;">
+      <div style="font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Contact Pressure</div>
+      <div style="font-size:24px;font-weight:700;color:#1E293B;">147.8<span style="font-size:14px;color:#64748B;"> MPa</span></div>
+      <div style="margin-top:8px;font-size:12px;color:#64748B;">
+        <span style="color:#059669;">Max: 155.2 MPa</span> &nbsp;|&nbsp; 
+        <span style="color:#DC2626;">Min: 133 MPa</span>
+      </div>
+    </div>
+        
+    <div style="flex:1;min-width:180px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;">
+      <div style="font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Insertion Force</div>
+      <div style="font-size:24px;font-weight:700;color:#1E293B;">3972<span style="font-size:14px;color:#64748B;"> N</span></div>
+      <div style="margin-top:8px;font-size:12px;color:#64748B;">
+        <span style="color:#059669;">Max: 4171 N</span> &nbsp;|&nbsp; 
+        <span style="color:#DC2626;">Min: 3575 N</span>
+      </div>
+    </div>
+        
+    <div style="flex:1;min-width:180px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;">
+      <div style="font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Retention Force</div>
+      <div style="font-size:24px;font-weight:700;color:#1E293B;">2648<span style="font-size:14px;color:#64748B;"> N</span></div>
+      <div style="margin-top:8px;font-size:12px;color:#64748B;">
+        <span style="color:#059669;">Max: 2781 N</span> &nbsp;|&nbsp; 
+        <span style="color:#DC2626;">Min: 2383 N</span>
+      </div>
+    </div>
+        
+    <div style="flex:1;min-width:180px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;">
+      <div style="font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Hoop Stress</div>
+      <div style="font-size:24px;font-weight:700;color:#1E293B;">295.6<span style="font-size:14px;color:#64748B;"> MPa</span></div>
+      <div style="margin-top:8px;font-size:12px;color:#64748B;">
+        <span style="color:#059669;">Max: 310.4 MPa</span> &nbsp;|&nbsp; 
+        <span style="color:#DC2626;">Min: 266 MPa</span>
+      </div>
+    </div>
+      </div>
+      <div style="margin-top:16px;">
+        <h4 style="font-size:14px;color:#64748B;margin-bottom:8px;">Material Properties Used</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+          <div style="background:#F8FAFC;padding:10px;border-radius:6px;">
+            <strong>Pin (304 stainless steel):</strong> E=193 GPa, ν=0.29, σy=215 MPa
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">high</span>
+          </div>
+          <div style="background:#F8FAFC;padding:10px;border-radius:6px;">
+            <strong>Hole (aluminum (assumed 6061-T6)):</strong> E=68.9 GPa, ν=0.33, σy=276 MPa
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;">medium</span>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:13px;color:#64748B;">Friction: μ = 0.45 (Machinery's Handbook - steel on aluminum, dry conditions)</div>
+      </div>
+      
+    </div>
+ 
+    <!-- OPTIMIZATION SUGGESTIONS -->
+    <div class="section">
+      <div class="section-title">Optimization Suggestions</div>
+      <p style="margin-bottom:16px;font-size:15px;line-height:1.7;color:#334155;">The current design fails due to excessive hoop stress in the aluminum hole component, with a safety factor of only 0.89. The most practical solution is reducing maximum interference to 0.15mm through tighter tolerances, which eliminates the yield issue while maintaining adequate retention force above 50N. Alternative material selection (7075-T6) offers the most robust performance but at higher cost.</p>
+      
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">1</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Reduce Maximum Interference to 0.15mm</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;">Low</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Tighten tolerances to achieve 0.15mm nominal interference with ±0.015mm variation. Change pin tolerance to +0.005/0 mm and hole tolerance to +0.010/0 mm to maintain manufacturability while reducing peak stress.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Interference: 0.18-0.21mm, Pin: +0.01/0mm, Hole: +0.02/0mm</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Interference: 0.135-0.165mm, Pin: +0.005/0mm, Hole: +0.010/0mm</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Reduced from 3575-4171N to approximately 2680-3130N<br>
+          Retention Force: Reduced from 2383-2781N to approximately 1790-2090N<br>
+          Stress: Maximum hoop stress reduced from 310.4 MPa to ~233 MPa (safety factor ~1.18)<br>
+          Eliminates yield failure while maintaining adequate retention
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Tighter tolerances increase manufacturing cost by 15-25%. Lower retention force reduces safety margin for dynamic loading.</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">2</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Switch to 7075-T6 Aluminum Alloy</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;">Low</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Replace 6061-T6 aluminum hole material with 7075-T6 aluminum alloy to increase yield strength from 276 MPa to 503 MPa, allowing current interference levels without yielding.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">6061-T6 aluminum (σy = 276 MPa)</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">7075-T6 aluminum (σy = 503 MPa, E = 71.7 GPa)</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Slight increase to 4050-4290N due to higher modulus<br>
+          Retention Force: Slight increase to 2450-2860N<br>
+          Stress: Safety factor improves from 0.89 to 1.62 with no design changes<br>
+          Enables potential for even higher interference if needed
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Material cost increases by 40-60%. 7075-T6 is less corrosion resistant and more difficult to machine than 6061-T6.</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">3</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Increase Hole Wall Thickness</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;">Medium</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Increase hole outer diameter from assumed 6mm to 8mm, increasing wall thickness from 1.5mm to 2.5mm. This reduces hoop stress by distributing load over larger cross-section.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Hole OD: 6mm (wall thickness 1.5mm)</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Hole OD: 8mm (wall thickness 2.5mm)</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Minimal change: 3575-4171N (contact pressure unchanged)<br>
+          Retention Force: Minimal change: 2383-2781N<br>
+          Stress: Maximum hoop stress reduced from 310.4 MPa to ~186 MPa (safety factor ~1.48)<br>
+          Provides most robust solution with highest safety margin
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Increases component size and weight by 78%. May require design changes to accommodate larger hole component envelope.</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">4</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Add Surface Treatment for Friction Reduction</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;">Medium</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;">Medium</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Apply dry film lubricant (PTFE-based) or anodize aluminum surface to reduce friction coefficient from 0.45 to 0.25-0.30, reducing insertion forces while maintaining retention.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Friction coefficient μ = 0.45 (dry steel-aluminum)</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Friction coefficient μ = 0.25-0.30 (treated surface)</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Reduced from 3575-4171N to approximately 2650-3090N<br>
+          Retention Force: Reduced from 2383-2781N to approximately 1770-2060N<br>
+          Stress: No change to hoop stress (310.4 MPa max) - yield issue remains<br>
+          Significantly easier assembly with lower insertion forces
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Does not address fundamental stress issue. Surface treatments add cost and may wear over time. Lower retention force reduces joint reliability.</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">5</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Implement Progressive Interference Design</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;">Medium</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEE2E2;color:#991B1B;">High</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Machine pin with 0.5° taper over engagement length, creating progressive interference from 0.12mm at entry to 0.18mm at full depth. Maintains retention while reducing peak assembly forces.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Uniform 0.18-0.21mm interference, 0° draft</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Progressive 0.12-0.18mm interference, 0.5° pin taper</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Reduced peak force from 4171N to approximately 3200N<br>
+          Retention Force: Maintained at ~2400N (concentrated at maximum interference zone)<br>
+          Stress: Peak stress reduced to ~280 MPa but still exceeds yield (safety factor ~0.99)<br>
+          Smoother insertion process with reduced risk of galling
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">More complex machining increases cost by 30-50%. Stress concentration at maximum interference point. Requires precise taper control.</div>
+      </div>
+    </div>
+      <div style="margin-top:16px;padding:16px;background:#F0FDF4;border-radius:8px;border:1px solid #BBF7D0;"><strong style="color:#166534;">Additional Considerations:</strong><br>Consider validating the assumed 6mm hole outer diameter through actual component measurement, as this significantly affects stress calculations. Investigate actual service loads to determine if the high baseline retention forces are necessary, as this would enable more aggressive interference reduction. Test actual friction coefficients for the specific surface finishes and assembly conditions to be used.</div>
+    </div>
+ 
+    <!-- ASSUMPTIONS -->
+    
+    <div class="section">
+      <div class="section-title">Assumptions</div>
+      <ul style="padding-left:20px;">
+        <li style="margin-bottom:6px;font-size:14px;">Aluminum hole material assumed to be 6061-T6 alloy</li><li style="margin-bottom:6px;font-size:14px;">Hole outer diameter assumed to be 6 mm (2x nominal inner diameter)</li><li style="margin-bottom:6px;font-size:14px;">Plane stress conditions assumed for thin-walled analysis</li><li style="margin-bottom:6px;font-size:14px;">Friction coefficient of 0.45 for dry steel-aluminum interface</li><li style="margin-bottom:6px;font-size:14px;">Insertion force includes 50% increase over retention force for dynamic effects</li><li style="margin-bottom:6px;font-size:14px;">Uniform contact pressure distribution along engagement length</li><li style="margin-bottom:6px;font-size:14px;">No surface roughness effects considered</li><li style="margin-bottom:6px;font-size:14px;">Room temperature assembly with no thermal effects</li>
+      </ul>
+    </div>
+ 
+    <!-- DETAILED CALCULATIONS APPENDIX -->
+    
+    <div class="section">
+      <div class="section-title">Appendix: Detailed Calculations</div>
+      <div class="appendix-block"><h4>Lamé Equation Setup</h4><pre>For thick-walled cylinder: p = δ/d × [E₁E₂(d²+D²)]/[2d(E₁(d²+D²)+2E₂D²)] where δ=interference, d=nominal diameter, D=outer diameter, E₁=pin modulus, E₂=hole modulus</pre></div>
+      <div class="appendix-block"><h4>Contact Pressure Calculation</h4><pre>Nominal case: p = 0.2/3.1 × [193×68.9×(3.1²+6²)]/[2×3.1×(193×(3.1²+6²)+2×68.9×6²)] = 0.0645 × 13303.7×45.61/[6.2×(193×45.61+2×68.9×36)] = 147.8 MPa</pre></div>
+      <div class="appendix-block"><h4>Insertion Force Calculation</h4><pre>F_insertion = 1.5 × μ × p × π × d × L = 1.5 × 0.45 × 147.8 × π × 3.1 × 4 = 3972 N</pre></div>
+      <div class="appendix-block"><h4>Hoop Stress & Yield Check</h4><pre>σ_hoop = p × (r²+R²)/(R²-r²) = 147.8 × (1.55²+3²)/(3²-1.55²) = 147.8 × 11.4/6.6 = 295.6 MPa. Safety factor = 276/310.4 = 0.89 &lt; 1.0 (FAIL)</pre></div>
+    </div>
+ 
+    <!-- FOOTER -->
     <div class="footer">
-      Press-Fit Optimization Assistant &mdash; AI-Powered Design Review
+      <p>Generated by Press-Fit Optimization Assistant | 2026-03-16 19:24:44 UTC</p>
+      <p style="margin-top:4px;">AI-powered analysis — verify all calculations independently before making design decisions.</p>
+      <p style="margin-top:8px;font-size:11px;color:#CBD5E1;">Built for CoLab Software FDE Technical Interview</p>
     </div>
   </div>
-
-  <script>
-    // Simulated step progression for visual polish during the live demo.
-    // In production, this would be driven by real workflow status updates.
-    const steps = ['step1', 'step2', 'step3', 'step4'];
-    const timings = [8000, 18000, 28000]; // ms after page load to advance
-
-    timings.forEach((ms, i) => {
-      setTimeout(() => {
-        // Complete current step
-        document.getElementById(steps[i]).classList.remove('active');
-        document.getElementById(steps[i]).classList.add('complete');
-        // Activate next step
-        if (i + 1 < steps.length) {
-          document.getElementById(steps[i + 1]).classList.add('active');
-        }
-      }, ms);
-    });
-  </script>
 </body>
 </html>
