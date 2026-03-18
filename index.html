@@ -3,211 +3,265 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analyzing Joint...</title>
+  <title>Press-Fit Analysis: Test 5</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #F8FAFC;
-      color: #334155;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px;
-      width: 100%;
-    }
-    .loading-card {
-      background: #fff;
-      border: 1px solid #E2E8F0;
-      border-radius: 16px;
-      padding: 60px 40px;
-      text-align: center;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-    }
-
-    /* Spinner */
-    .spinner-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 32px;
-    }
-    .spinner {
-      width: 64px;
-      height: 64px;
-      border: 4px solid #E2E8F0;
-      border-top: 4px solid #2563EB;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Pulse ring behind spinner */
-    .spinner-ring {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .spinner-ring::before {
-      content: '';
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      border: 2px solid #DBEAFE;
-      border-radius: 50%;
-      animation: pulse-ring 2s ease-in-out infinite;
-    }
-    @keyframes pulse-ring {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.15); opacity: 0; }
-    }
-
-    .status-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1E293B;
-      margin-bottom: 8px;
-    }
-    .joint-name {
-      color: #2563EB;
-    }
-    .status-subtitle {
-      font-size: 15px;
-      color: #64748B;
-      margin-bottom: 32px;
-    }
-
-    /* Progress steps */
-    .steps {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #64748B;
-      transition: all 0.5s ease;
-    }
-    .step.active {
-      background: #EFF6FF;
-      border-color: #2563EB;
-      color: #1E293B;
-    }
-    .step.complete {
-      background: #F0FDF4;
-      border-color: #059669;
-      color: #059669;
-    }
-    .step-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #CBD5E1;
-      flex-shrink: 0;
-    }
-    .step.active .step-dot {
-      background: #2563EB;
-      animation: dot-pulse 1.5s ease-in-out infinite;
-    }
-    .step.complete .step-dot {
-      background: #059669;
-    }
-    @keyframes dot-pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    .footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: #94A3B8;
-      margin-top: 16px;
-    }
-
-    @media (max-width: 640px) {
-      .loading-card { padding: 40px 24px; }
-      .steps { flex-direction: column; align-items: center; }
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #F8FAFC; color: #334155; line-height: 1.6; }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+    .header { background: linear-gradient(135deg, #1E293B 0%, #334155 100%); color: white; padding: 40px 32px; border-radius: 16px; margin-bottom: 24px; }
+    .header h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .header .subtitle { font-size: 16px; opacity: 0.8; }
+    .badge-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.15); color: white; }
+    .section { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .section-title { font-size: 20px; font-weight: 700; color: #1E293B; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #2563EB; }
+    .metrics-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+    .appendix-block { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .appendix-block h4 { font-size: 14px; color: #2563EB; margin-bottom: 8px; }
+    .appendix-block pre { white-space: pre-wrap; font-size: 13px; color: #334155; font-family: 'SF Mono', 'Consolas', monospace; }
+    .footer { text-align: center; padding: 24px; font-size: 12px; color: #94A3B8; }
+    @media (max-width: 640px) { .metrics-grid { flex-direction: column; } }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="loading-card">
-      <div class="spinner-wrapper">
-        <div class="spinner-ring">
-          <div class="spinner"></div>
-        </div>
-      </div>
-
-      <div class="status-title">
-        Analyzing <span class="joint-name" id="jointName">Test 5</span>
-      </div>
-      <div class="status-subtitle">
-        Press-fit optimization in progress. This typically takes 30–60 seconds.
-      </div>
-
-      <div class="steps">
-        <div class="step active" id="step1">
-          <span class="step-dot"></span>
-          Parsing inputs
-        </div>
-        <div class="step" id="step2">
-          <span class="step-dot"></span>
-          Baseline calculation
-        </div>
-        <div class="step" id="step3">
-          <span class="step-dot"></span>
-          Optimization analysis
-        </div>
-        <div class="step" id="step4">
-          <span class="step-dot"></span>
-          Building report
-        </div>
+    <!-- HEADER -->
+    <div class="header">
+      <h1>Test 5 — Press-Fit Analysis</h1>
+      <div class="subtitle">AI-Powered Design Review &amp; Optimization Report</div>
+      <div class="badge-row">
+        <span class="badge">304 stainless steel pin</span>
+        <span class="badge">aluminum hole</span>
+        <span class="badge">Ø3.2 mm pin → Ø3 mm hole</span>
+        <span class="badge">Axial (along the axis of the pin) loading</span>
       </div>
     </div>
-
+ 
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <p style="font-size:15px;line-height:1.7;">Baseline analysis could not be fully parsed.</p>
+      
+    </div>
+ 
+    <!-- INPUT SUMMARY -->
+    <div class="section">
+      <div class="section-title">Input Parameters</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <h4 style="font-size:14px;color:#2563EB;margin-bottom:8px;">Pin</h4>
+          <table style="width:100%;font-size:13px;">
+            <tr><td style="color:#64748B;padding:2px 0;">Material</td><td style="font-weight:600;">304 stainless steel</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Diameter</td><td style="font-weight:600;">3.2 mm (+0.01/0)</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Length</td><td style="font-weight:600;">6 mm</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Draft Angle</td><td style="font-weight:600;">0°</td></tr>
+          </table>
+        </div>
+        <div>
+          <h4 style="font-size:14px;color:#2563EB;margin-bottom:8px;">Hole</h4>
+          <table style="width:100%;font-size:13px;">
+            <tr><td style="color:#64748B;padding:2px 0;">Material</td><td style="font-weight:600;">aluminum</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Inner Diameter</td><td style="font-weight:600;">3 mm (+0.02/0)</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Depth</td><td style="font-weight:600;">4 mm</td></tr>
+            <tr><td style="color:#64748B;padding:2px 0;">Draft Angle</td><td style="font-weight:600;">0°</td></tr>
+          </table>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:#EFF6FF;border-radius:8px;"><strong style="color:#2563EB;">Optimization Goal:</strong> Maintain low cost of manufacturability while keep retention force &gt;50N and preventing damage during assmbley.</div>
+      <div style="margin-top:8px;padding:12px;background:#F8FAFC;border-radius:8px;"><strong>Additional Context:</strong> Pin component includes a 1mm lead in chamfer</div>
+    </div>
+ 
+    <!-- BASELINE PERFORMANCE -->
+    <div class="section">
+      <div class="section-title">Baseline Performance</div>
+      <p style="color:#DC2626;">Baseline analysis could not be parsed. Check LLM response.</p>
+    </div>
+ 
+    <!-- OPTIMIZATION SUGGESTIONS -->
+    <div class="section">
+      <div class="section-title">Optimization Suggestions</div>
+      <p style="margin-bottom:16px;font-size:15px;line-height:1.7;color:#334155;">The current design has excessive interference (0.18-0.21mm) for the stated requirements, likely resulting in insertion forces around 280N and retention forces around 95N. The 50N retention target provides significant optimization headroom. The most impactful approach is reducing pin diameter to 3.18mm, which maintains adequate retention while substantially reducing assembly forces and stress levels.</p>
+      
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">1</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Reduce Pin Diameter to 3.18mm</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;">Low</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Reduce pin diameter from 3.2mm to 3.18mm while maintaining +0.01/0 tolerance. This reduces nominal interference from 0.2mm to 0.18mm while keeping maximum interference at 0.19mm, still well above minimum for 50N retention.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Pin: 3.2mm +0.01/0 (interference: 0.18-0.21mm)</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Pin: 3.18mm +0.01/0 (interference: 0.16-0.19mm)</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Reduced from ~280N to ~225N (20% reduction)<br>
+          Retention Force: Reduced from ~95N to ~85N (still 70% above 50N target)<br>
+          Stress: Peak contact stress reduced from ~185MPa to ~160MPa in aluminum<br>
+          Reduced risk of aluminum yielding during assembly
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Slightly reduced safety margin on retention force, potential for looser fit over multiple cycles</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">2</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Tighten Hole Tolerance to +0.01/0</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;">Medium</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Reduce hole tolerance from +0.02/0 to +0.01/0 to narrow interference variation. This reduces maximum interference while maintaining minimum, improving assembly consistency.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Hole: 3.0mm +0.02/0 (interference: 0.18-0.21mm)</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Hole: 3.0mm +0.01/0 (interference: 0.19-0.21mm)</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: More consistent: 270-290N range vs previous 260-300N range<br>
+          Retention Force: More consistent: 90-100N range vs previous 80-105N range<br>
+          Stress: Reduced stress variation, peak stress more predictable<br>
+          Improved assembly process reliability
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Increased hole machining cost due to tighter tolerance, may require reaming vs drilling</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">3</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Increase Engagement Length to 5mm</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;border:1px solid #86EFAC;">High</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;">Low</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Increase hole depth from 4mm to 5mm to provide more engagement length. This increases retention force through more contact area while reducing stress per unit length.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Hole depth: 4mm (engagement length: 4mm)</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Hole depth: 5mm (engagement length: 5mm)</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Increased from ~280N to ~350N (25% increase)<br>
+          Retention Force: Increased from ~95N to ~120N (25% increase)<br>
+          Stress: Distributed over longer length, peak stress unchanged but average stress reduced<br>
+          Improved joint reliability and fatigue resistance
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Higher insertion force may complicate assembly, requires deeper hole machining</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">4</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Add 0.5° Draft Angle to Pin</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;">Medium</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;">Medium</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Add 0.5° draft angle to pin, tapering from full diameter at tip to 0.05mm smaller at base. This creates progressive engagement reducing peak insertion force while maintaining retention.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Pin draft: 0° (constant 3.2mm diameter)</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Pin draft: 0.5° (3.2mm tip, 3.15mm at 6mm length)</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Reduced peak from ~280N to ~200N, but force builds gradually<br>
+          Retention Force: Slightly reduced to ~85N due to reduced interference at exit<br>
+          Stress: Peak stress reduced, more gradual stress buildup during insertion<br>
+          Easier assembly, reduced risk of cross-threading or jamming
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">More complex pin machining, potential for slight reduction in retention consistency</div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;margin-bottom:16px;border-left:4px solid #2563EB;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <span style="display:inline-block;background:#2563EB;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px;margin-right:10px;">5</span>
+          <span style="font-size:18px;font-weight:700;color:#1E293B;">Increase Lead-in Chamfer to 1.5mm</span>
+        </div>
+        <div><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;">Medium</span> <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:#DCFCE7;color:#166534;">Low</span></div>
+      </div>
+      <p style="color:#334155;margin:0 0 12px 0;line-height:1.6;">Increase existing lead-in chamfer from 1mm to 1.5mm length while maintaining appropriate angle. This improves alignment and reduces initial insertion force spike.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:#F8FAFC;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:4px;">Before</div>
+          <div style="font-size:13px;color:#1E293B;">Lead-in chamfer: 1mm length</div>
+        </div>
+        <div style="background:#EFF6FF;border-radius:8px;padding:12px;">
+          <div style="font-size:11px;color:#2563EB;text-transform:uppercase;margin-bottom:4px;">After</div>
+          <div style="font-size:13px;color:#1E293B;">Lead-in chamfer: 1.5mm length</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <div style="font-size:11px;color:#64748B;text-transform:uppercase;margin-bottom:6px;">Expected Impact</div>
+        <div style="font-size:13px;color:#334155;line-height:1.5;">
+          Insertion Force: Reduced initial spike, smoother force buildup, peak unchanged at ~280N<br>
+          Retention Force: Minimal change, ~95N maintained<br>
+          Stress: Reduced stress concentration at initial contact<br>
+          Improved assembly alignment, reduced operator effort
+        </div>
+      </div>
+      <div style="background:#FFF7ED;border-radius:8px;padding:12px;">
+        <div style="font-size:11px;color:#9A3412;text-transform:uppercase;margin-bottom:4px;">Tradeoffs</div>
+        <div style="font-size:13px;color:#334155;">Slightly reduced effective engagement length, minimal impact on performance</div>
+      </div>
+    </div>
+      <div style="margin-top:16px;padding:16px;background:#F0FDF4;border-radius:8px;border:1px solid #BBF7D0;"><strong style="color:#166534;">Additional Considerations:</strong><br>Consider conducting pull-out testing to validate retention force calculations, especially with the aluminum hole material. Evaluate assembly tooling requirements for expected insertion forces. Monitor for aluminum galling during repeated assembly trials, and consider surface treatments if needed.</div>
+    </div>
+ 
+    <!-- ASSUMPTIONS -->
+    
+ 
+    <!-- DETAILED CALCULATIONS APPENDIX -->
+    
+ 
+    <!-- FOOTER -->
     <div class="footer">
-      Press-Fit Optimization Assistant &mdash; AI-Powered Design Review
+      <p>Generated by Press-Fit Optimization Assistant | 2026-03-18 00:08:59 UTC</p>
+      <p style="margin-top:4px;">AI-powered analysis — verify all calculations independently before making design decisions.</p>
+      <p style="margin-top:8px;font-size:11px;color:#CBD5E1;">Built for CoLab Software FDE Technical Interview</p>
     </div>
   </div>
-
-  <script>
-    // Simulated step progression for visual polish during the live demo.
-    // In production, this would be driven by real workflow status updates.
-    const steps = ['step1', 'step2', 'step3', 'step4'];
-    const timings = [8000, 18000, 28000]; // ms after page load to advance
-
-    timings.forEach((ms, i) => {
-      setTimeout(() => {
-        // Complete current step
-        document.getElementById(steps[i]).classList.remove('active');
-        document.getElementById(steps[i]).classList.add('complete');
-        // Activate next step
-        if (i + 1 < steps.length) {
-          document.getElementById(steps[i + 1]).classList.add('active');
-        }
-      }, ms);
-    });
-  </script>
 </body>
 </html>
